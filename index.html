@@ -21,36 +21,38 @@
             var countClone = $('#count');
 
             liClone.removeAttr('hidden');
-            var url = "https://data.cityofchicago.org/resource/xzkq-xp2w.json?$select=department,count(department)&$group=department";
+            var url = "https://data.cityofchicago.org/resource/xzkq-xp2w.json?$select=department,count(department)&$group=department&$ORDER=department";
 
             $.get(url, function(response) {
-                response = response.sort(function(a, b){
-                    if (a.department > b.department)
-                    {
-                        return 1;
-                    }
-                    if (a.department < b.department)
-                    {
-                        return -1;
-                    }
-                    return 0;
-                });
                 $.each(response, function(i, v) {
                     var li = liClone.clone();
                     li.empty();
                     li.text(v.department);
+                    li.attr('data-department', encodeURIComponent(v.department));
 
                     var count = countClone.clone();
                     count.text(v.count_department);
 
                     li.append(count);
-
-                    li.on('click', function(){
-                        
-                    });
                     
                     $('.list-group').append(li);
                 });
+            });
+
+            $('body').on('click', '.list-group-item', function() {
+                var url = 'https://data.cityofchicago.org/resource/xzkq-xp2w.json?department=' + $(this).attr('data-department');
+                
+                $.get(url, function(response) {
+                    console.log(response);
+                });
+
+                /*var card = $('<div>');
+                card.addClass('card');
+
+                var cardBody = $('<div');
+                cardBody.addClass('card-body');
+
+                car.append(cardBody);*/
             });
         });
     </script>
