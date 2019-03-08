@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+
+<head>
+    <title>IT202 Exam 2</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <div class="container" id="list-div">
+        <ul class="list-group">
+            <li class="list-group-item d-flex justify-content-between align-items-center" hidden>
+                <span id="count" class="badge badge-primary badge-pill"></span>
+                <div class='card'>
+                    <div class='card-body' hidden>
+
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <script>
+        $(document).ready(function(){
+            var liClone = $('.list-group-item').clone();
+            var countClone = $('#count');
+
+            liClone.removeAttr('hidden');
+            var url = "https://data.cityofchicago.org/resource/xzkq-xp2w.json?$select=department,count(department)&$group=department";
+
+            $.get(url, function(response) {
+                $.each(response, function(i, v) {
+                    var li = liClone.clone();
+                    li.empty();
+                    li.text(v.department);
+
+                    var count = countClone.clone();
+                    count.text(v.count_department);
+
+                    li.append(count);
+
+                    li.on('click', function(){
+                        var card = li.children[1];
+                        
+                        console.log(card);
+
+                        //card.append(cardBody);
+
+                        //li.after(card);
+                    });
+                    
+                    $('.list-group').append(li);
+                });
+            });
+        });
+    </script>
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
